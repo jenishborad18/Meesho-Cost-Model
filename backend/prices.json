@@ -8,7 +8,6 @@
       "PARTLY_SOURCED": "partially grounded, one or more components unverified"
     }
   },
-
   "fx_inr_per_usd": {
     "value": 95.27,
     "status": "SOURCED",
@@ -16,7 +15,6 @@
     "source": "https://ycharts.com/indicators/us_dollar_to_indian_rupee_exchange_rate",
     "note": "ECB derived USD/INR historical daily rate. Not a forecast."
   },
-  
   "onprem": {
     "server_usd": {
       "low": 16000,
@@ -154,6 +152,151 @@
       "status": "ASSUMPTION",
       "note": "One time per rack installation and cabling allowance. A public provider lists initial setup and testing at INR 10,000 to 25,000, but does not establish an identical labour only charge.",
       "source": "https://cyfuture.cloud/kb/colocation/understand-colocation-costs-and-how-to-reduce-them"
+    }
+  },
+  "aws": {
+    "region": "ap-south-1 (Mumbai)",
+    "vcpu_hour": {
+      "on_demand": {
+        "value": 0.0505,
+        "status": "DERIVED",
+        "source": "https://aws-pricing.com/m6i.xlarge.html",
+        "note": "USD 0.202/instance hour divided by four vCPUs, Linux m6i.xlarge in Mumbai, excludes EBS, OS licences, support, tax and non compute charges"
+      },
+      "commit_1y": {
+        "value": 0.03335,
+        "status": "DERIVED",
+        "source": "https://instances.usage.ai/aws/ec2/m6i.xlarge",
+        "note": "No upfront standard 1 year RI approx USD 0.1334/instance hour /4, billing commitment and utilization matter, Linux m6i.xlarge in Mumbai, excludes EBS, OS licences, support, tax and non compute charges"
+      },
+      "commit_3y": {
+        "value": 0.022975,
+        "status": "DERIVED",
+        "source": "https://instances.usage.ai/aws/ec2/m6i.xlarge",
+        "note": "No upfront standard 3 year RI approx USD 0.0919/instance hour /4, avoid mixing Savings Plans and RIs, Linux m6i.xlarge in Mumbai, excludes EBS, OS licences, support, tax and non compute charges"
+      }
+    },
+    "object_storage_gb_month": {
+      "value": 0.025,
+      "status": "ASSUMPTION",
+      "source": "https://aws.amazon.com/s3/pricing/",
+      "note": "Indicative S3 Standard Mumbai rate, not independently established from the official region specific pricing table in this research. Does not include requests, retrieval, data transfer, replication or enterprise discounts."
+    },
+    "cdn_egress_tiers_india": {
+      "unit": "USD per GB, cumulative thresholds in TB per month, decimal for model compatibility",
+      "tiers": [
+        [10, 0.109],
+        [50, 0.085],
+        [150, 0.065],
+        [500, 0.05],
+        [5000, 0.035],
+        [1000000000, 0.025]
+      ],
+      "status": "PARTLY_SOURCED",
+      "source": "https://aws.amazon.com/cloudfront/pricing/",
+      "note": "Original illustrative tiers retained for compatibility. The current AWS CloudFront official page emphasizes flat rate plans and does not confirm these India PAYG tier prices in the inspected page. ALL tier prices must be treated as modelling assumptions until independently verified, enterprise scale discounts are custom negotiated. Rates are marginal by tier, not blended."
+    },
+    "cdn_request_per_10k": {
+      "value": 0.01,
+      "status": "ASSUMPTION",
+      "source": "https://aws.amazon.com/cloudfront/pricing/",
+      "note": "Retains original placeholder, evidence used US/Europe rate, not verified for HTTPS requests to India. Current AWS has flat rate CloudFront options, verify PAYG India request prices separately."
+    },
+    "cdn_origin_fill_gb": {
+      "value": 0.0,
+      "status": "SOURCED",
+      "source": "https://aws.amazon.com/cloudfront/pricing/",
+      "note": "AWS origin to CloudFront data transfer waiver for eligible AWS origin traffic. Does not imply free third party origin egress or zero origin processing/storage requests."
+    },
+    "managed_multiplier_cache": {
+      "value": 2.5,
+      "status": "ASSUMPTION",
+      "note": "Illustrative ratio for managed Redis/cache versus a self hosted alternative, loosely motivated by a vendor cost saving case study. Not a market price and not Meesho specific, can double count RAM/compute if applied carelessly."
+    },
+    "managed_multiplier_db": {
+      "value": 1.5,
+      "status": "ASSUMPTION",
+      "note": "Illustrative managed database premium relative to raw compute/storage. Database engine, replication, backups, IOPS and licensing cannot be summarized accurately by a universal multiplier."
+    }
+  },
+  "gcp": {
+    "region": "asia-south1 (Mumbai)",
+    "vcpu_hour": {
+      "on_demand": {
+        "value": 0.047175,
+        "status": "DERIVED",
+        "source": "https://instances.usage.ai/gcp/compute/n4-standard-4",
+        "note": "n4-standard-4 Mumbai Linux, 0.1887/4 instance hour divided by four vCPUs, commitments assume eligible usage and may change under pricing models"
+      },
+      "commit_1y": {
+        "value": 0.029725,
+        "status": "DERIVED",
+        "source": "https://instances.usage.ai/gcp/compute/n4-standard-4",
+        "note": "n4-standard-4 Mumbai Linux, 0.1189/4 instance hour divided by four vCPUs, commitments assume eligible usage and may change under pricing models"
+      },
+      "commit_3y": {
+        "value": 0.021225,
+        "status": "DERIVED",
+        "source": "https://instances.usage.ai/gcp/compute/n4-standard-4",
+        "note": "n4-standard-4 Mumbai Linux, 0.0849/4 instance hour divided by four vCPUs, commitments assume eligible usage and may change under pricing models"
+      }
+    },
+    "object_storage_gb_month": {
+      "value": 0.02,
+      "status": "ASSUMPTION",
+      "source": "https://cloud.google.com/storage/pricing",
+      "note": "Approx $0.020/GiB month from Google public regional Standard storage table ($0.000027397/GiB hour at 730 hours), but page region selector was not confirmed set to Mumbai, do not label this an independently verified asia south1 SKU. Confirm Mumbai in Google Cloud calculator."
+    },
+    "cdn_egress_tiers_india": {
+      "unit": "USD per GiB, monthly volume thresholds in TiB, Asia Pacific destination",
+      "tiers": [
+        [10, 0.09],
+        [150, 0.06],
+        [1000, 0.05],
+        [1000000000, 0.04]
+      ],
+      "status": "SOURCED",
+      "source": "https://cloud.google.com/cdn/pricing",
+      "note": "Official Asia Pacific cache data transfer out tier table. Above 500 TiB/month contact sales for custom volume discounts, $0.04/GiB is public list tier reference, NOT Meesho effective negotiated price. Destination geography matters."
+    },
+    "cdn_request_per_10k": {
+      "value": 0.0075,
+      "status": "SOURCED",
+      "source": "https://cloud.google.com/cdn/pricing",
+      "note": "Official per 10,000 HTTP/HTTPS cache lookup requests, not all application API requests."
+    },
+    "cdn_origin_fill_gb": {
+      "value": 0.02,
+      "status": "SOURCED",
+      "source": "https://cloud.google.com/cdn/pricing",
+      "note": "Within Asia Pacific cache fill rate in USD/GiB for eligible origin locations, cross region and external origin rates differ."
+    },
+    "managed_multiplier_cache": {
+      "value": 2.5,
+      "status": "ASSUMPTION",
+      "note": "Illustrative ratio for managed Redis/cache versus a self hosted alternative, loosely motivated by a vendor cost saving case study. Not a market price and not Meesho specific, can double count RAM/compute if applied carelessly."
+    },
+    "managed_multiplier_db": {
+      "value": 1.5,
+      "status": "ASSUMPTION",
+      "note": "Illustrative managed database premium relative to raw compute/storage. Database engine, replication, backups, IOPS and licensing cannot be summarized accurately by a universal multiplier."
+    }
+  },
+  "shared": {
+    "block_ssd_gb_month": {
+      "value": 0.1,
+      "status": "ASSUMPTION",
+      "source": "https://aws-pricing.com/ap-south-1.html",
+      "note": "Shared value retained for model compatibility. AWS Mumbai gp3 list price is $0.0912/GB month (plus extra IOPS/throughput), GCP PD balanced/SSD is a DIFFERENT product/price, so $0.10 is not a sourced common rate. Prefer provider specific rates."
+    },
+    "ram_gb_per_vcpu": {
+      "value": 4,
+      "status": "SOURCED",
+      "sources": [
+        "https://instances.usage.ai/aws/ec2/m6i.xlarge",
+        "https://instances.usage.ai/gcp/compute/n4-standard-4"
+      ],
+      "note": "m6i.xlarge and n4-standard-4 both have 16 GiB/4 vCPU. This is the selected VM family ratio, NOT a disclosed Meesho workload wide RAM ratio."
     }
   }
 }

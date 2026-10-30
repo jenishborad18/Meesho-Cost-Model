@@ -1,0 +1,159 @@
+{
+  "_meta": {
+    "retrieved": "2026-10-29",
+    "currency": "USD unless explicitly INR",
+    "status_legend": {
+      "SOURCED": "public evidence directly supports displayed number under specified conditions",
+      "ASSUMPTION": "scenario input, not Meesho disclosure and/or price not independently verified",
+      "PARTLY_SOURCED": "partially grounded, one or more components unverified"
+    }
+  },
+
+  "fx_inr_per_usd": {
+    "value": 95.27,
+    "status": "SOURCED",
+    "date": "2026-10-29",
+    "source": "https://ycharts.com/indicators/us_dollar_to_indian_rupee_exchange_rate",
+    "note": "ECB derived USD/INR historical daily rate. Not a forecast."
+  },
+  
+  "onprem": {
+    "server_usd": {
+      "low": 16000,
+      "base": 25000,
+      "high": 45000,
+      "status": "ASSUMPTION",
+      "note": "Budget for a dual socket server with about 64 physical cores / 128 hardware threads. Excludes separately modelled RAM and bulk storage. Actual configured quotations vary considerably.",
+      "sources": [
+        "https://www.dell.com/en-in/shop/ipovw/poweredge-r760",
+        "https://www.techsupplydirect.com/dell-emc-16g-poweredge-r760-16-bay-2-5-inch-small-form-factor-2u-server-configure-to-order/"
+      ]
+    },
+    "server_vcpu": {
+      "value": 128,
+      "status": "ASSUMPTION",
+      "note": "Two 32-core CPUs with SMT/Hyper Threading provide 128 logical threads. Assumes one simulated vCPU per logical thread; actual cloud vCPU equivalence depends on workload and processor performance.",
+      "source": "https://www.dell.com/en-in/shop/ipovw/poweredge-r760"
+    },
+    "server_kw": {
+      "value": 0.7,
+      "status": "ASSUMPTION",
+      "note": "Estimated average IT power draw per compute server, not nameplate power. Requires measurement for a selected configuration."
+    },
+    "ram_usd_per_gb": {
+      "low": 12,
+      "base": 25,
+      "high": 45,
+      "status": "ASSUMPTION",
+      "note": "Budget range for enterprise server memory, not consumer RAM. The market includes substantially higher OEM configuration prices.",
+      "source": "https://www.techsupplydirect.com/dell-emc-16g-poweredge-r760-16-bay-2-5-inch-small-form-factor-2u-server-configure-to-order/"
+    },
+    "nvme_usd_per_tb": {
+      "low": 150,
+      "base": 250,
+      "high": 450,
+      "status": "ASSUMPTION",
+      "note": "Planning prices for enterprise NVMe SSD capacity. Exact values depend on drive endurance, capacity, warranty, interface and procurement volume."
+    },
+    "hdd_object_usd_per_raw_tb": {
+      "low": 45,
+      "base": 65,
+      "high": 100,
+      "status": "ASSUMPTION",
+      "note": "Enterprise HDD capacity plus an allowance for storage node chassis, controllers and integration. Public 20 TB enterprise HDD listings support approximately USD 42/TB for bare drives.",
+      "source": "https://www.bytesprice.com/?capacity=20"
+    },
+    "storage_overhead_factor": {
+      "value": 1.5,
+      "status": "SOURCED_TECHNICAL_DEFAULT",
+      "note": "Ceph 4+2 erasure coding has a raw to usable capacity factor of 1.5. This is a selected architecture, not a disclosed Meesho configuration.",
+      "source": "https://docs.ceph.com/en/latest/rados/operations/erasure-code/"
+    },
+    "storage_kw_per_raw_tb": {
+      "value": 0.0012,
+      "status": "ASSUMPTION",
+      "note": "1.2 W per raw TB, representing drives plus a limited allocation of storage server overhead. Validate against actual drive and storage node configuration."
+    },
+    "network_gear_pct_of_hw": {
+      "value": 0.10,
+      "status": "ASSUMPTION",
+      "note": "Network switching, routing and associated equipment budgeted at 10% of hardware capex. A published data center cost study reports networking at approximately 10% of total development costs, but its cost denominator differs from this simulator.",
+      "source": "https://www.nyserda.ny.gov/-/media/Project/Nyserda/Files/Programs/Large-Scale-Thermal/DATA-HEAT---Appendix-B---Task-1-Slide-Deck-Report.pdf"
+    },
+    "maintenance_pct_per_year": {
+      "value": 0.08,
+      "status": "ASSUMPTION",
+      "note": "Annual allowance for hardware support, spare parts and replacements. An industry TCO guide provides a broad 5%-8% maintenance range, but this is not a Meesho contract quote.",
+      "source": "https://www.dcsglobal.com/learning-center/cost-optimization/data-center-tco"
+    },
+    "hardware_life_years": {
+      "value": 5,
+      "status": "ASSUMPTION",
+      "note": "Five year economic replacement period for the financial model. Individual server, SSD and HDD replacement cycles can differ."
+    },
+    "capacity_headroom": {
+      "value": 1.2,
+      "status": "ASSUMPTION",
+      "note": "Provision 20% above the modelled workload for operational reserve and growth. Does not by itself model failover between data centers."
+    },
+    "rack_kw_limit": {
+      "value": 8,
+      "status": "ASSUMPTION",
+      "note": "Selected IT power budget per rack. A published Indian provider lists an 8 kW high density rack configuration.",
+      "source": "https://www.vyomcloud.com/hosting/dedicated-servers/full-rack-colocation/"
+    },
+    "colo_rack_inr_month": {
+      "low": 40000,
+      "base": 55000,
+      "high": 90000,
+      "status": "PARTLY_SOURCED",
+      "note": "Indicative Indian full rack retail pricing. Public prices often include power and/or bandwidth; only use as an independent space charge if those bundled costs are removed.",
+      "sources": [
+        "https://cyfuture.cloud/kb/colocation/understand-colocation-costs-and-how-to-reduce-them",
+        "https://bharatdatacenter.com/blog/colocation-cost-in-india/",
+        "https://www.vyomcloud.com/hosting/dedicated-servers/full-rack-colocation/"
+      ]
+    },
+    "colo_power_inr_kw_month": {
+      "low": 8000,
+      "base": 10000,
+      "high": 15000,
+      "status": "PARTLY_SOURCED",
+      "note": "Indicative Indian colocation power related charges, not necessarily metered electricity tariffs. Avoid adding to a rack package that already includes power.",
+      "sources": [
+        "https://cyfuture.cloud/kb/colocation/understand-colocation-costs-and-how-to-reduce-them",
+        "https://technodigital.in/colocation-cost-india/"
+      ]
+    },
+    "transit_inr_per_mbps_month": {
+      "low": 60,
+      "base": 150,
+      "high": 750,
+      "status": "ASSUMPTION",
+      "note": "Wholesale high capacity IP transit planning range. No verified public quote was established for Meesho scale committed internet capacity. CDN charges and bundled bandwidth must be modelled separately."
+    },
+    "staff_loaded_inr_month": {
+      "low": 200000,
+      "base": 250000,
+      "high": 350000,
+      "status": "ASSUMPTION",
+      "note": "Fully loaded monthly cost per infrastructure engineer/SRE including employer benefits, overhead and on call. This is not a verified Meesho compensation figure."
+    },
+    "staff_min": {
+      "value": 8,
+      "status": "ASSUMPTION",
+      "note": "Minimum dedicated on prem operations team to cover infrastructure, networking, storage and on call support. Assumes physical data center facilities are managed by the colocation provider."
+    },
+    "staff_per_100_servers": {
+      "value": 6,
+      "status": "ASSUMPTION",
+      "note": "Conservative labour intensive staffing scenario. Actual ratio depends on automation and fleet design; six engineers per hundred compute servers may substantially overestimate staffing for a hyperscale style deployment."
+    },
+    "setup_labour_inr_per_rack": {
+      "value": 15000,
+      "status": "ASSUMPTION",
+      "note": "One time per rack installation and cabling allowance. A public provider lists initial setup and testing at INR 10,000 to 25,000, but does not establish an identical labour only charge.",
+      "source": "https://cyfuture.cloud/kb/colocation/understand-colocation-costs-and-how-to-reduce-them"
+    }
+  }
+}

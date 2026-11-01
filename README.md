@@ -11,8 +11,14 @@ The workload is hypothetical and scaled from public figures. It is **not** Meesh
 ## Structure
 ```
 backend/
-
+    tests/
+        test_cloud_model.py
+    model.py
+    prices.json
 frontend/
+    app.js                           the web page (no framework)
+    index.html
+    style.css
 
 requirements.txt 
 ```

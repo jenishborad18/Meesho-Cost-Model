@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meesho: cloud vs on-premises cost model</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="#"><span><strong>Meesho Cloud Cost</strong></span></a>
+    <nav class="app-nav" aria-label="Primary navigation">
+      <button class="app-nav-link active" type="button"><span>Overview</span></button>
+    </nav>
+    <div class="top-controls"><span id="status" class="status" role="status">Loading model</span></div>
+  </header>
+
+  <main class="workspace">
+    <div id="error" class="error" role="alert" hidden></div>
+    <section id="page-overview" class="app-page">
+      <div class="page-heading">
+        <div>
+          <span class="groupno">Group 3</span>
+          <h1>Meesho: cloud vs on-premises cost model</h1>
+          <p>Compare cloud, hybrid, and on-premises economics from one current scenario.</p>
+        </div>
+      </div>
+      <section id="kpis" class="kpis" aria-label="Key figures"></section>
+      <article class="surface cost-map">
+        <div class="section-heading"><div><span class="eyebrow">Monthly economics</span><h2>Cost by scenario</h2></div><span class="legend-hint">USD / month</span></div>
+        <div class="table-wrap plain"><table id="scenario-table"></table></div>
+      </article>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

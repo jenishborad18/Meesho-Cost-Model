@@ -297,6 +297,11 @@
         "https://instances.usage.ai/gcp/compute/n4-standard-4"
       ],
       "note": "m6i.xlarge and n4-standard-4 both have 16 GiB/4 vCPU. This is the selected VM family ratio, NOT a disclosed Meesho workload wide RAM ratio."
+    },
+    "selfhost_engineer_inr_month": {
+      "value": 250000,
+      "status": "ASSUMPTION",
+      "note": "Loaded monthly cost of one engineer who runs self hosted cache/DB on cloud VMs"
     }
   }
 }

@@ -1,0 +1,17 @@
+Provider,Service,Quantity,Unit / region,Note
+AWS,"EC2 m6i.xlarge (4 vCPU, 16 GB) - app services",250 instances baseline; x3 for 5% of hours,ap-south-1 Mumbai,"Price on demand, 1y and 3y, commitment covers 70% of baseline"
+AWS,"EC2 m6i.xlarge (4 vCPU, 16 GB) - cache tier (managed price: ElastiCache / Memorystore)",4096 GB RAM in total,16 GB nodes or equivalent,Compare real managed price with the model's 2.5x multiplier
+AWS,"EC2 m6i.xlarge (4 vCPU, 16 GB) - database",100 instances,ap-south-1 Mumbai,Managed alternative: RDS / Bigtable
+AWS,EBS gp3 - database SSD,200000 GB,ap-south-1 Mumbai,Model uses 0.10 USD/GB-month on both (assumption)
+AWS,Amazon S3 Standard,1000000 GB,ap-south-1 Mumbai,1 PB image store
+AWS,Amazon CloudFront - data transfer out to India,"12,000 TB per month (10,914 TiB)",India destination,"Google bills in GiB, AWS in GB"
+AWS,Amazon CloudFront - HTTPS requests,300 billion per month,India destination,
+AWS,Amazon CloudFront - cache fill / origin,120 TB per month (1% miss),same region,AWS: free from S3 to CloudFront. GCP: charged per GiB
+GCP,"Compute Engine n4-standard-4 (4 vCPU, 16 GB) - app services",250 instances baseline; x3 for 5% of hours,asia-south1 Mumbai,"Price on demand, 1y and 3y, commitment covers 70% of baseline"
+GCP,"Compute Engine n4-standard-4 (4 vCPU, 16 GB) - cache tier (managed price: ElastiCache / Memorystore)",4096 GB RAM in total,16 GB nodes or equivalent,Compare real managed price with the model's 2.5x multiplier
+GCP,"Compute Engine n4-standard-4 (4 vCPU, 16 GB) - database",100 instances,asia-south1 Mumbai,Managed alternative: RDS / Bigtable
+GCP,Hyperdisk / SSD PD - database SSD,200000 GB,asia-south1 Mumbai,Model uses 0.10 USD/GB-month on both (assumption)
+GCP,Cloud Storage Standard,1000000 GB,asia-south1 Mumbai,1 PB image store
+GCP,Cloud CDN + external Application Load Balancer - data transfer out to India,"12,000 TB per month (10,914 TiB)",India destination,"Google bills in GiB, AWS in GB"
+GCP,Cloud CDN + external Application Load Balancer - HTTPS requests,300 billion per month,India destination,
+GCP,Cloud CDN + external Application Load Balancer - cache fill / origin,120 TB per month (1% miss),same region,AWS: free from S3 to CloudFront. GCP: charged per GiB

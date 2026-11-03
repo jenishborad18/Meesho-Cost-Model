@@ -1,0 +1,822 @@
+{
+ "base": {
+  "on_demand": {
+   "egress_tb_month": 12000.0,
+   "scenarios": {
+    "AWS (managed cache/DB)": {
+     "monthly_usd": 874384.9,
+     "monthly_inr_cr": 8.3302649423,
+     "capex_usd": 0.0,
+     "tco5_usd": 52463094.0,
+     "tco10_usd": 104926188.0,
+     "items": {
+      "CDN egress": 372340.0,
+      "CDN requests": 300000.0,
+      "Cache fill (origin)": 0.0,
+      "Object storage": 25000.0,
+      "App compute": 40551.50000000001,
+      "Cache tier": 94374.40000000001,
+      "Database compute": 22119.000000000004,
+      "Database SSD": 20000.0
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 672340.0,
+      "Object storage": 25000.0,
+      "App compute": 40551.50000000001,
+      "Cache and database": 136493.40000000002
+     }
+    },
+    "GCP (managed cache/DB)": {
+     "monthly_usd": 907604.8150000001,
+     "monthly_inr_cr": 8.646751072505,
+     "capex_usd": 0.0,
+     "tco5_usd": 54456288.900000006,
+     "tco10_usd": 108912577.80000001,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 37881.52500000001,
+      "Cache tier": 88160.64,
+      "Database compute": 20662.65,
+      "Database SSD": 20000.0
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 37881.52500000001,
+      "Cache and database": 128823.29000000001
+     }
+    },
+    "GCP (self-hosted cache/DB, Meesho-style)": {
+     "monthly_usd": 863565.6065169518,
+     "monthly_inr_cr": 8.227189533287,
+     "capex_usd": 0.0,
+     "tco5_usd": 51813936.39101711,
+     "tco10_usd": 103627872.78203422,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 37881.52500000001,
+      "Cache tier": 35264.256,
+      "Database compute": 13775.1,
+      "Database SSD": 20000.0,
+      "Extra ops staff (self-hosting)": 15744.725516951821
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 37881.52500000001,
+      "Cache and database": 84784.08151695182
+     }
+    },
+    "Hybrid (GCP edge + own cache/DB)": {
+     "monthly_usd": 821875.7799749834,
+     "monthly_inr_cr": 7.830010555821666,
+     "capex_usd": 1172808.3417655085,
+     "tco5_usd": 51782691.14026451,
+     "tco10_usd": 102267573.93876351,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 37881.52500000001,
+      "Own data tier: Colo rack rent": 1731.9198068647004,
+      "Own data tier: Colo power": 2057.3108008817044,
+      "Own data tier: IP transit (sized for peak)": 0.0,
+      "Own data tier: Hardware maintenance": 7815.573333333334,
+      "Own data tier: IT staff": 31489.451033903642
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 37881.52500000001,
+      "Own facilities (rack, power, staff)": 43094.254974983385
+     }
+    },
+    "On-premises (all, lower bound)": {
+     "monthly_usd": 412414.3136153389,
+     "monthly_inr_cr": 3.9290711658133337,
+     "capex_usd": 2970995.578041356,
+     "tco5_usd": 30935590.39496169,
+     "tco10_usd": 58650185.211882025,
+     "items": {
+      "Colo rack rent": 4618.452818305867,
+      "Colo power": 6625.380497533327,
+      "IP transit (sized for peak)": 349882.789265596,
+      "Hardware maintenance": 19798.24,
+      "IT staff": 31489.451033903642
+     },
+     "groups": {
+      "Own IP transit": 349882.789265596,
+      "Own facilities (rack, power, staff)": 62531.52434974284
+     }
+    }
+   },
+   "breakeven_months_vs_onprem": {
+    "AWS (managed cache/DB)": 7,
+    "GCP (managed cache/DB)": 7,
+    "GCP (self-hosted cache/DB, Meesho-style)": 8
+   },
+   "breakeven_months_vs_hybrid": {
+    "AWS (managed cache/DB)": 25,
+    "GCP (managed cache/DB)": 16,
+    "GCP (self-hosted cache/DB, Meesho-style)": 32
+   },
+   "onprem_detail": {
+    "capex_usd": 2970995.578041356,
+    "hw_usd": 2969736.0,
+    "monthly_usd": 412414.3136153389,
+    "hw_items": {
+     "Servers": 2100000,
+     "Extra RAM (cache)": 245760.0,
+     "NVMe (database)": 120000.0,
+     "Object storage hardware": 234000.0,
+     "Network gear": 269976.0
+    },
+    "servers": 84,
+    "racks": 8,
+    "kw": 63.12,
+    "peak_gbps": 111.11111111111111,
+    "staff": 12
+   }
+  },
+  "1y": {
+   "egress_tb_month": 12000.0,
+   "scenarios": {
+    "AWS (managed cache/DB)": {
+     "monthly_usd": 837928.116,
+     "monthly_inr_cr": 7.9829411611320005,
+     "capex_usd": 0.0,
+     "tco5_usd": 50275686.96,
+     "tco10_usd": 100551373.92,
+     "items": {
+      "CDN egress": 372340.0,
+      "CDN requests": 300000.0,
+      "Cache fill (origin)": 0.0,
+      "Object storage": 25000.0,
+      "App compute": 31787.850000000006,
+      "Cache tier": 71939.456,
+      "Database compute": 16860.81,
+      "Database SSD": 20000.0
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 672340.0,
+      "Object storage": 25000.0,
+      "App compute": 31787.850000000006,
+      "Cache and database": 108800.266
+     }
+    },
+    "GCP (managed cache/DB)": {
+     "monthly_usd": 870510.303,
+     "monthly_inr_cr": 8.293351656680999,
+     "capex_usd": 0.0,
+     "tco5_usd": 52230618.18,
+     "tco10_usd": 104461236.36,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 28964.575000000004,
+      "Cache tier": 65333.24800000001,
+      "Database compute": 15312.48,
+      "Database SSD": 20000.0
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 28964.575000000004,
+      "Cache and database": 100645.728
+     }
+    },
+    "GCP (self-hosted cache/DB, Meesho-style)": {
+     "monthly_usd": 841950.9197169518,
+     "monthly_inr_cr": 8.0212664121434,
+     "capex_usd": 0.0,
+     "tco5_usd": 50517055.183017105,
+     "tco10_usd": 101034110.36603421,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 28964.575000000004,
+      "Cache tier": 26133.2992,
+      "Database compute": 10208.32,
+      "Database SSD": 20000.0,
+      "Extra ops staff (self-hosting)": 15744.725516951821
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 28964.575000000004,
+      "Cache and database": 72086.34471695182
+     }
+    },
+    "Hybrid (GCP edge + own cache/DB)": {
+     "monthly_usd": 812958.8299749834,
+     "monthly_inr_cr": 7.7450587731716665,
+     "capex_usd": 1172808.3417655085,
+     "tco5_usd": 51247674.14026451,
+     "tco10_usd": 101197539.93876351,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 28964.575000000004,
+      "Own data tier: Colo rack rent": 1731.9198068647004,
+      "Own data tier: Colo power": 2057.3108008817044,
+      "Own data tier: IP transit (sized for peak)": 0.0,
+      "Own data tier: Hardware maintenance": 7815.573333333334,
+      "Own data tier: IT staff": 31489.451033903642
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 28964.575000000004,
+      "Own facilities (rack, power, staff)": 43094.254974983385
+     }
+    },
+    "On-premises (all, lower bound)": {
+     "monthly_usd": 412414.3136153389,
+     "monthly_inr_cr": 3.9290711658133337,
+     "capex_usd": 2970995.578041356,
+     "tco5_usd": 30935590.39496169,
+     "tco10_usd": 58650185.211882025,
+     "items": {
+      "Colo rack rent": 4618.452818305867,
+      "Colo power": 6625.380497533327,
+      "IP transit (sized for peak)": 349882.789265596,
+      "Hardware maintenance": 19798.24,
+      "IT staff": 31489.451033903642
+     },
+     "groups": {
+      "Own IP transit": 349882.789265596,
+      "Own facilities (rack, power, staff)": 62531.52434974284
+     }
+    }
+   },
+   "breakeven_months_vs_onprem": {
+    "AWS (managed cache/DB)": 8,
+    "GCP (managed cache/DB)": 8,
+    "GCP (self-hosted cache/DB, Meesho-style)": 8
+   },
+   "breakeven_months_vs_hybrid": {
+    "AWS (managed cache/DB)": 52,
+    "GCP (managed cache/DB)": 23,
+    "GCP (self-hosted cache/DB, Meesho-style)": 45
+   },
+   "onprem_detail": {
+    "capex_usd": 2970995.578041356,
+    "hw_usd": 2969736.0,
+    "monthly_usd": 412414.3136153389,
+    "hw_items": {
+     "Servers": 2100000,
+     "Extra RAM (cache)": 245760.0,
+     "NVMe (database)": 120000.0,
+     "Object storage hardware": 234000.0,
+     "Network gear": 269976.0
+    },
+    "servers": 84,
+    "racks": 8,
+    "kw": 63.12,
+    "peak_gbps": 111.11111111111111,
+    "staff": 12
+   }
+  },
+  "3y": {
+   "egress_tb_month": 12000.0,
+   "scenarios": {
+    "AWS (managed cache/DB)": {
+     "monthly_usd": 815873.356,
+     "monthly_inr_cr": 7.772825462612,
+     "capex_usd": 0.0,
+     "tco5_usd": 48952401.36,
+     "tco10_usd": 97904802.72,
+     "items": {
+      "CDN egress": 372340.0,
+      "CDN requests": 300000.0,
+      "Cache fill (origin)": 0.0,
+      "Object storage": 25000.0,
+      "App compute": 26486.225000000006,
+      "Cache tier": 58367.296,
+      "Database compute": 13679.835,
+      "Database SSD": 20000.0
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 672340.0,
+      "Object storage": 25000.0,
+      "App compute": 26486.225000000006,
+      "Cache and database": 92047.131
+     }
+    },
+    "GCP (managed cache/DB)": {
+     "monthly_usd": 852441.343,
+     "monthly_inr_cr": 8.121208674761,
+     "capex_usd": 0.0,
+     "tco5_usd": 51146480.58,
+     "tco10_usd": 102292961.16,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 24621.075000000004,
+      "Cache tier": 54213.888000000006,
+      "Database compute": 12706.380000000001,
+      "Database SSD": 20000.0
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 24621.075000000004,
+      "Cache and database": 86920.26800000001
+     }
+    },
+    "GCP (self-hosted cache/DB, Meesho-style)": {
+     "monthly_usd": 831422.2757169518,
+     "monthly_inr_cr": 7.9209600207554,
+     "capex_usd": 0.0,
+     "tco5_usd": 49885336.54301711,
+     "tco10_usd": 99770673.08603422,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 24621.075000000004,
+      "Cache tier": 21685.555200000003,
+      "Database compute": 8470.92,
+      "Database SSD": 20000.0,
+      "Extra ops staff (self-hosting)": 15744.725516951821
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 24621.075000000004,
+      "Cache and database": 65901.20071695182
+     }
+    },
+    "Hybrid (GCP edge + own cache/DB)": {
+     "monthly_usd": 808615.3299749834,
+     "monthly_inr_cr": 7.7036782486716655,
+     "capex_usd": 1172808.3417655085,
+     "tco5_usd": 50987064.14026451,
+     "tco10_usd": 100676319.93876351,
+     "items": {
+      "CDN egress": 493500.0,
+      "CDN requests": 225000.0,
+      "Cache fill (origin)": 2400.0000000000023,
+      "Object storage": 20000.0,
+      "App compute": 24621.075000000004,
+      "Own data tier: Colo rack rent": 1731.9198068647004,
+      "Own data tier: Colo power": 2057.3108008817044,
+      "Own data tier: IP transit (sized for peak)": 0.0,
+      "Own data tier: Hardware maintenance": 7815.573333333334,
+      "Own data tier: IT staff": 31489.451033903642
+     },
+     "groups": {
+      "CDN (egress, requests, fill)": 720900.0,
+      "Object storage": 20000.0,
+      "App compute": 24621.075000000004,
+      "Own facilities (rack, power, staff)": 43094.254974983385
+     }
+    },
+    "On-premises (all, lower bound)": {
+     "monthly_usd": 412414.3136153389,
+     "monthly_inr_cr": 3.9290711658133337,
+     "capex_usd": 2970995.578041356,
+     "tco5_usd": 30935590.39496169,
+     "tco10_usd": 58650185.211882025,
+     "items": {
+      "Colo rack rent": 4618.452818305867,
+      "Colo power": 6625.380497533327,
+      "IP transit (sized for peak)": 349882.789265596,
+      "Hardware maintenance": 19798.24,
+      "IT staff": 31489.451033903642
+     },
+     "groups": {
+      "Own IP transit": 349882.789265596,
+      "Own facilities (rack, power, staff)": 62531.52434974284
+     }
+    }
+   },
+   "breakeven_months_vs_onprem": {
+    "AWS (managed cache/DB)": 8,
+    "GCP (managed cache/DB)": 8,
+    "GCP (self-hosted cache/DB, Meesho-style)": 8
+   },
+   "breakeven_months_vs_hybrid": {
+    "AWS (managed cache/DB)": null,
+    "GCP (managed cache/DB)": 30,
+    "GCP (self-hosted cache/DB, Meesho-style)": 57
+   },
+   "onprem_detail": {
+    "capex_usd": 2970995.578041356,
+    "hw_usd": 2969736.0,
+    "monthly_usd": 412414.3136153389,
+    "hw_items": {
+     "Servers": 2100000,
+     "Extra RAM (cache)": 245760.0,
+     "NVMe (database)": 120000.0,
+     "Object storage hardware": 234000.0,
+     "Network gear": 269976.0
+    },
+    "servers": 84,
+    "racks": 8,
+    "kw": 63.12,
+    "peak_gbps": 111.11111111111111,
+    "staff": 12
+   }
+  }
+ },
+ "egress_tb_month": 12000.0,
+ "onprem_detail": {
+  "capex_usd": 2970995.578041356,
+  "hw_usd": 2969736.0,
+  "monthly_usd": 412414.3136153389,
+  "hw_items": {
+   "Servers": 2100000,
+   "Extra RAM (cache)": 245760.0,
+   "NVMe (database)": 120000.0,
+   "Object storage hardware": 234000.0,
+   "Network gear": 269976.0
+  },
+  "servers": 84,
+  "racks": 8,
+  "kw": 63.12,
+  "peak_gbps": 111.11111111111111,
+  "staff": 12
+ },
+ "calibration": {
+  "gcp_modelled_inr_cr_per_year": 97.454504097132,
+  "meesho_reported_server_software_inr_cr_FY25": 620,
+  "cdn_share_of_modelled_bill": 0.8428732438895798
+ },
+ "grouped_monthly_usd": {
+  "AWS (managed cache/DB)": {
+   "CDN egress + requests + fill": 672340.0,
+   "Object storage": 25000.0,
+   "App compute": 26486.225000000006,
+   "Cache + database": 92047.131,
+   "IP transit (own)": 0.0,
+   "Own facilities (rack, power, staff)": 0.0
+  },
+  "GCP (managed cache/DB)": {
+   "CDN egress + requests + fill": 720900.0,
+   "Object storage": 20000.0,
+   "App compute": 24621.075000000004,
+   "Cache + database": 86920.26800000001,
+   "IP transit (own)": 0.0,
+   "Own facilities (rack, power, staff)": 0.0
+  },
+  "GCP (self-hosted cache/DB, Meesho-style)": {
+   "CDN egress + requests + fill": 720900.0,
+   "Object storage": 20000.0,
+   "App compute": 24621.075000000004,
+   "Cache + database": 65901.20071695182,
+   "IP transit (own)": 0.0,
+   "Own facilities (rack, power, staff)": 0.0
+  },
+  "Hybrid (GCP edge + own cache/DB)": {
+   "CDN egress + requests + fill": 720900.0,
+   "Object storage": 20000.0,
+   "App compute": 24621.075000000004,
+   "Cache + database": 0.0,
+   "IP transit (own)": 0.0,
+   "Own facilities (rack, power, staff)": 43094.254974983385
+  },
+  "On-premises (all, lower bound)": {
+   "CDN egress + requests + fill": 0.0,
+   "Object storage": 0.0,
+   "App compute": 0.0,
+   "Cache + database": 0.0,
+   "IP transit (own)": 349882.789265596,
+   "Own facilities (rack, power, staff)": 62531.52434974284
+  }
+ },
+ "sensitivity": {
+  "base_gap_musd_gcp_minus_onprem_5y": 20.21089018503831,
+  "rows": [
+   {
+    "label": "Number of on-prem sites (3 / 1)",
+    "delta_a": -15.027900687141802,
+    "delta_b": 15.027900687141809
+   },
+   {
+    "label": "Negotiated CDN egress discount (0.4 / 0)",
+    "delta_a": -11.844,
+    "delta_b": 0.0
+   },
+   {
+    "label": "Peak-to-average ratio (2 / 4)",
+    "delta_a": 8.196491795309829,
+    "delta_b": -8.231287638702284
+   },
+   {
+    "label": "Server price (45,000 / 16,000 USD)",
+    "delta_a": -4.4351999999999965,
+    "delta_b": 1.9958400000000012
+   },
+   {
+    "label": "Average object size (20 / 60 KB)",
+    "delta_a": -3.975516322032121,
+    "delta_b": 3.975516322032121
+   },
+   {
+    "label": "Baseline app vCPU (500 / 2000)",
+    "delta_a": 1.302398084837833,
+    "delta_b": -2.639592013068114
+   },
+   {
+    "label": "Commitment coverage (0.4 / 0.9)",
+    "delta_a": 1.4184892800000029,
+    "delta_b": -0.945659519999996
+   },
+   {
+    "label": "Staff cost (350,000 / 200,000 INR per month)",
+    "delta_a": -0.7557468248136843,
+    "delta_b": 0.3778734124068457
+   },
+   {
+    "label": "Migration cost (1.0M / 0 USD)",
+    "delta_a": -0.75,
+    "delta_b": 0.25
+   },
+   {
+    "label": "Cache hit ratio (0.97 / 0.995)",
+    "delta_a": 0.28800000000000026,
+    "delta_b": -0.07199999999999918
+   },
+   {
+    "label": "Peak hours share (2% / 10%)",
+    "delta_a": -0.12397589999999781,
+    "delta_b": 0.20662649999999871
+   },
+   {
+    "label": "Colo power (15,000 / 8,000 INR per kW)",
+    "delta_a": -0.19876141492599686,
+    "delta_b": 0.07950456597040301
+   }
+  ]
+ },
+ "scaling": [
+  {
+   "k": 0.1,
+   "gcp_monthly": 97394.1343,
+   "aws_monthly": 101593.3356,
+   "onprem_monthly": 70108.29256303138,
+   "hybrid_monthly": 122064.32401250831,
+   "be_onprem": 22,
+   "be_hybrid": null,
+   "tco5_ratio_onprem_vs_gcp": 0.8793483368667737,
+   "servers": 10
+  },
+  {
+   "k": 0.25,
+   "gcp_monthly": 223235.33575,
+   "aws_monthly": 231123.339,
+   "onprem_monthly": 127554.78200062978,
+   "hybrid_monthly": 236297.05613882476,
+   "be_onprem": 11,
+   "be_hybrid": null,
+   "tco5_ratio_onprem_vs_gcp": 0.7050576790091423,
+   "servers": 22
+  },
+  {
+   "k": 0.5,
+   "gcp_monthly": 432970.6715,
+   "aws_monthly": 444106.678,
+   "onprem_monthly": 221951.88232462126,
+   "hybrid_monthly": 427091.04380558763,
+   "be_onprem": 9,
+   "be_hybrid": null,
+   "tco5_ratio_onprem_vs_gcp": 0.6365896436358645,
+   "servers": 42
+  },
+  {
+   "k": 1.0,
+   "gcp_monthly": 852441.343,
+   "aws_monthly": 815873.356,
+   "onprem_monthly": 412414.3136153389,
+   "hybrid_monthly": 808615.3299749834,
+   "be_onprem": 8,
+   "be_hybrid": 30,
+   "tco5_ratio_onprem_vs_gcp": 0.6048429929909693,
+   "servers": 84
+  },
+  {
+   "k": 1.5,
+   "gcp_monthly": 1271912.0145,
+   "aws_monthly": 1187640.034,
+   "onprem_monthly": 602876.7449060566,
+   "hybrid_monthly": 1190139.6161443791,
+   "be_onprem": 8,
+   "be_hybrid": 24,
+   "tco5_ratio_onprem_vs_gcp": 0.5940361380427522,
+   "servers": 126
+  },
+  {
+   "k": 2.0,
+   "gcp_monthly": 1691382.686,
+   "aws_monthly": 1559406.712,
+   "onprem_monthly": 792825.5587586159,
+   "hybrid_monthly": 1571150.2848756167,
+   "be_onprem": 7,
+   "be_hybrid": 21,
+   "tco5_ratio_onprem_vs_gcp": 0.5872019893827038,
+   "servers": 166
+  }
+ ],
+ "heatmap": {
+  "peak_ratio": [
+   1.0,
+   1.5,
+   2.0,
+   3.0,
+   4.0,
+   5.0
+  ],
+  "object_kb": [
+   5,
+   10,
+   20,
+   40,
+   60,
+   80
+  ],
+  "be_vs_onprem": [
+   [
+    7.0,
+    6.0,
+    5.0,
+    4.0,
+    3.0,
+    3.0
+   ],
+   [
+    7.0,
+    7.0,
+    6.0,
+    4.0,
+    4.0,
+    3.0
+   ],
+   [
+    8.0,
+    8.0,
+    7.0,
+    5.0,
+    4.0,
+    4.0
+   ],
+   [
+    10.0,
+    10.0,
+    9.0,
+    8.0,
+    7.0,
+    6.0
+   ],
+   [
+    13.0,
+    13.0,
+    12.0,
+    12.0,
+    12.0,
+    12.0
+   ],
+   [
+    15.0,
+    16.0,
+    18.0,
+    22.0,
+    29.0,
+    44.0
+   ]
+  ],
+  "transit": [
+   30,
+   60,
+   100,
+   150,
+   250,
+   300,
+   400,
+   600,
+   750
+  ],
+  "discount": [
+   0.0,
+   0.2,
+   0.4,
+   0.6
+  ],
+  "be_transit_discount": [
+   [
+    5.0,
+    5.0,
+    6.0,
+    8.0,
+    16.0,
+    36.0,
+    null,
+    null,
+    null
+   ],
+   [
+    6.0,
+    6.0,
+    8.0,
+    10.0,
+    30.0,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    7.0,
+    8.0,
+    9.0,
+    14.0,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    8.0,
+    10.0,
+    13.0,
+    23.0,
+    null,
+    null,
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ "parity_transit_inr_per_mbps": {
+  "0.0": 338.64618790264495,
+  "0.2": 296.33201740264496,
+  "0.4": 254.01784690264495,
+  "0.6": 211.70367640264493
+ },
+ "onprem_band": {
+  "low": {
+   "onprem_monthly": 186240.93090833773,
+   "onprem_capex": 1866820.858041356,
+   "tco5": 15156837.992541619,
+   "be_gcp": 4,
+   "be_aws": 4,
+   "hybrid_monthly": 798296.4710425178,
+   "be_hybrid": 16
+  },
+  "base": {
+   "onprem_monthly": 412414.3136153389,
+   "onprem_capex": 2970995.578041356,
+   "tco5": 30935590.39496169,
+   "be_gcp": 8,
+   "be_aws": 8,
+   "hybrid_monthly": 808615.3299749834,
+   "be_hybrid": 30
+  },
+  "high": {
+   "onprem_monthly": 1846182.7487698821,
+   "onprem_capex": 5279464.378041356,
+   "tco5": 121578634.10423428,
+   "be_gcp": null,
+   "be_aws": null,
+   "hybrid_monthly": 829594.355241839,
+   "be_hybrid": null
+  }
+ },
+ "provider_gap": {
+  "on_demand": {
+   "aws": 874384.9,
+   "gcp": 907604.8150000001
+  },
+  "1y": {
+   "aws": 837928.116,
+   "gcp": 870510.303
+  },
+  "3y": {
+   "aws": 815873.356,
+   "gcp": 852441.343
+  }
+ },
+ "aws_cheap_tail": {
+  "aws": 726560.856,
+  "gcp": 852441.343,
+  "note": "AWS tiers above 150 TB set 25% lower"
+ }
+}

@@ -57,13 +57,16 @@ def egress_tb(p: Params) -> float:
 
 
 # Tiered cost calculation
-def tiered_cost(tb: float, tiers: list, discount: float = 0.0) -> float:
-    cost, left = 0.0, tb
-    for width, price in tiers:
-        use = min(left, width)
-        cost += use * 1000.0 * price
-        left -= use
-        if left <= 0:
+def tiered_cost(
+    volume: float, tiers: list, discount: float = 0.0, per_unit: float = 1000.0
+) -> float:
+    cost, prev = 0.0, 0.0
+    for upper, price in tiers:
+        use = min(volume, upper) - prev
+        if use > 0:
+            cost += use * per_unit * price
+        prev = upper
+        if volume <= upper:
             break
     return cost * (1 - discount)
 
@@ -93,15 +96,17 @@ def cloud_costs(
     pr = PRICES[provider]
     sh = PRICES["shared"]
     eg = egress_tb(p)
+    cfg = pr["cdn_egress_tiers_india"]
+    binary = "GiB" in cfg.get("unit", "")
+    vol = eg * 1e12 / 2**40 if binary else eg
+    per_unit = 1024.0 if binary else 1000.0
     items = {}
-    items["CDN egress"] = tiered_cost(
-        eg, pr["cdn_egress_tiers_india"]["tiers"], p.egress_discount
-    )
+    items["CDN egress"] = tiered_cost(vol, cfg["tiers"], p.egress_discount, per_unit)
     items["CDN requests"] = (
         p.cdn_requests_per_day * DAYS / 1e4 * pr["cdn_request_per_10k"]["value"]
     )
     items["Cache fill (origin)"] = (
-        eg * 1000 * (1 - p.cache_hit) * pr["cdn_origin_fill_gb"]["value"]
+        vol * per_unit * (1 - p.cache_hit) * pr["cdn_origin_fill_gb"]["value"]
     )
     items["Object storage"] = (
         p.storage_tb * 1000 * pr["object_storage_gb_month"]["value"]

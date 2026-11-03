@@ -340,12 +340,18 @@ def price_table() -> list:
                         f"low {node.get('low')} / base {node.get('base')} / high {node.get('high')}",
                     ),
                 )
+                srcs = node.get("sources") or (
+                    [node["source"]] if node.get("source") else []
+                )
+                text = node.get("note", "") + (
+                    " Source: " + "; ".join(srcs) if srcs else ""
+                )
                 rows.append(
                     dict(
                         item=prefix,
                         value=str(val),
                         status=node["status"],
-                        source=node.get("source", node.get("note", "")),
+                        source=text.strip(),
                     )
                 )
             else:

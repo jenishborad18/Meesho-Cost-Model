@@ -1,38 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Meesho: cloud vs on-premises cost model</title>
+  <script src="theme.js"></script>
+  <script>
+    window.__switchWorkspace = function (page) {
+      if (["overview", "configure"].indexOf(page) < 0) return;
+      document.querySelectorAll(".app-page").forEach(function (section) {
+        section.hidden = section.id !== "page-" + page;
+      });
+      document.querySelectorAll(".app-nav-link").forEach(function (button) {
+        button.classList.toggle("active", button.dataset.page === page);
+      });
+    };
+    document.addEventListener("click", function (event) {
+      var control = event.target.closest && event.target.closest("[data-page], [data-goto]");
+      if (!control) return;
+      var page = control.dataset.page || control.dataset.goto;
+      if (["overview", "configure"].indexOf(page) < 0) return;
+      event.preventDefault();
+      window.__switchWorkspace(page);
+    });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
   <header class="top">
-    <a class="brand" href="#"><span><strong>Meesho Cloud Cost</strong></span></a>
+    <a class="brand" href="#overview" aria-label="Cloud Cost Intelligence home">
+      <span><strong>Meesho Cloud Cost</strong></span>
+    </a>
     <nav class="app-nav" aria-label="Primary navigation">
-      <button class="app-nav-link active" type="button"><span>Overview</span></button>
+      <button class="app-nav-link active" data-page="overview" type="button"><span>Overview</span></button>
+      <button class="app-nav-link" data-page="configure" type="button"><span>Configure scenario</span></button>
     </nav>
-    <div class="top-controls"><span id="status" class="status" role="status">Loading model</span></div>
+    <div class="top-controls"><span id="status" class="status" role="status" aria-live="polite">Loading model</span><button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode"><span class="theme-icon" aria-hidden="true">☾</span></button></div>
   </header>
 
   <main class="workspace">
     <div id="error" class="error" role="alert" hidden></div>
-    <section id="page-overview" class="app-page">
-      <div class="page-heading">
-        <div>
-          <span class="groupno">Group 3</span>
-          <h1>Meesho: cloud vs on-premises cost model</h1>
-          <p>Compare cloud, hybrid, and on-premises economics from one current scenario.</p>
-        </div>
-      </div>
-      <section id="kpis" class="kpis" aria-label="Key figures"></section>
-      <article class="surface cost-map">
-        <div class="section-heading"><div><span class="eyebrow">Monthly economics</span><h2>Cost by scenario</h2></div><span class="legend-hint">USD / month</span></div>
-        <div class="table-wrap plain"><table id="scenario-table"></table></div>
-      </article>
+    <section id="page-overview" class="app-page page-overview" aria-labelledby="overview-title">
+      <div class="page-heading overview-heading"><div><span class="groupno">Group 3</span><h1 id="overview-title">Meesho: cloud vs on-premises cost model</h1><p>Compare cloud, hybrid, and on-premises economics from one current scenario.</p></div><button class="btn btn-primary page-link" type="button" data-goto="configure">Tune the scenario <span aria-hidden="true">→</span></button></div>
+      <section id="kpis" class="kpis" aria-label="Key figures"><div class="loading-grid"><i></i><i></i><i></i><i></i><i></i></div></section>
+      <section class="overview-grid"><article class="surface cost-map"><div class="section-heading"><div><span class="eyebrow">Monthly economics</span><h2>Cost by scenario</h2></div><span class="legend-hint">USD / month</span></div><div class="table-wrap plain"><table id="scenario-table"></table></div></article><aside id="findings" class="surface findings" aria-label="Key findings"></aside></section>
+      <section class="section-block"><div class="section-heading"><div><span class="eyebrow">Cost composition</span><h2>Monthly cost by cost group</h2></div><span class="legend-hint">Hover to inspect</span></div><div class="chart"><canvas id="chart-groups" aria-label="Stacked bar chart of monthly cost by scenario" role="img"></canvas></div></section>
     </section>
+
+    <section id="page-configure" class="app-page" aria-labelledby="configure-title" hidden>
+      <div class="page-heading config-heading"><div><span class="eyebrow">Scenario studio</span><h1 id="configure-title">Model your actual workload.</h1><p>Every control maps directly to the cost engine. Enter precise values or use range controls for faster exploration.</p></div><div class="config-actions"><button id="reset" type="button" class="btn btn-secondary">Reset defaults</button><button id="apply" type="button" class="btn btn-primary">Apply &amp; recalculate <span aria-hidden="true">↗</span></button></div></div>
+      <div class="config-intro surface"><span class="intro-orb" aria-hidden="true"></span><div><strong>Live scenario inputs</strong><p>Changes are calculated automatically after a short pause. Use Apply when you are ready to confirm a set of edits.</p></div><span id="config-state" class="config-state">Synced</span></div>
+      <form id="form" class="config-form" autocomplete="off" novalidate onsubmit="return false"></form>
+    </section>
+
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/chart.umd.js';s.onload=function(){window.dispatchEvent(new Event('chartjs-ready'))};document.head.appendChild(s);"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@
   <script src="theme.js"></script>
   <script>
     window.__switchWorkspace = function (page) {
-      if (["overview", "configure"].indexOf(page) < 0) return;
+      if (["overview", "configure", "analysis"].indexOf(page) < 0) return;
       document.querySelectorAll(".app-page").forEach(function (section) {
         section.hidden = section.id !== "page-" + page;
       });
@@ -19,7 +19,7 @@
       var control = event.target.closest && event.target.closest("[data-page], [data-goto]");
       if (!control) return;
       var page = control.dataset.page || control.dataset.goto;
-      if (["overview", "configure"].indexOf(page) < 0) return;
+      if (["overview", "configure", "analysis"].indexOf(page) < 0) return;
       event.preventDefault();
       window.__switchWorkspace(page);
     });
@@ -39,6 +39,7 @@
     <nav class="app-nav" aria-label="Primary navigation">
       <button class="app-nav-link active" data-page="overview" type="button"><span>Overview</span></button>
       <button class="app-nav-link" data-page="configure" type="button"><span>Configure scenario</span></button>
+      <button class="app-nav-link" data-page="analysis" type="button"><span>Analysis</span></button>
     </nav>
     <div class="top-controls"><span id="status" class="status" role="status" aria-live="polite">Loading model</span><button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode"><span class="theme-icon" aria-hidden="true">☾</span></button></div>
   </header>
@@ -58,6 +59,13 @@
       <form id="form" class="config-form" autocomplete="off" novalidate onsubmit="return false"></form>
     </section>
 
+    <section id="page-analysis" class="app-page" aria-labelledby="analysis-title" hidden>
+      <nav class="tabs" role="tablist" aria-label="Analysis views"><button role="tab" aria-selected="true" aria-controls="tab-summary" id="t-summary" data-tab="summary" type="button">Summary</button><button role="tab" aria-selected="false" aria-controls="tab-breakeven" id="t-breakeven" data-tab="breakeven" type="button">Break-even</button><button role="tab" aria-selected="false" aria-controls="tab-items" id="t-items" data-tab="items" type="button">Line items</button><button role="tab" aria-selected="false" aria-controls="tab-prices" id="t-prices" data-tab="prices" type="button">Assumptions &amp; sources</button></nav>
+      <section id="tab-summary" class="tabpanel" role="tabpanel" aria-labelledby="t-summary"><div id="analysis-kpis" class="kpis small" aria-label="Summary key figures"></div><div class="analysis-summary"><div class="surface"><div class="section-heading"><div><span class="eyebrow">Detailed comparison</span><h2>All scenario totals</h2></div></div><div class="table-wrap plain"><table id="analysis-scenario-table"></table></div></div></div><p class="note">On-premises (all) is a <strong>lower bound</strong>: it has no regional CDN edge, so tier 2/3 users would see worse latency than with a cloud CDN, and it leaves out DDoS and security tooling. The hybrid keeps the CDN in the cloud and self-hosts cache and database, as Meesho did.</p></section>
+      <section id="tab-breakeven" class="tabpanel" role="tabpanel" aria-labelledby="t-breakeven" hidden><div id="breakeven-cards" class="kpis small"></div><div class="surface chart-surface"><div class="section-heading"><div><span class="eyebrow">Cumulative cost</span><h2>When does ownership pay back?</h2></div></div><div class="chart tall"><canvas id="chart-cumulative" aria-label="Line chart of cumulative cost over time" role="img"></canvas></div></div><p class="note">Where an on-premises line drops below a cloud line, leaving the cloud has paid back its up-front cost. Hardware is refreshed every five years, causing the step at month 60.</p></section>
+      <section id="tab-items" class="tabpanel" role="tabpanel" aria-labelledby="t-items" hidden><div class="toolbar"><label class="inline"><span>Inspect scenario</span><select id="item-scenario"></select></label></div><div class="surface"><div class="table-wrap plain"><table id="items-table"></table></div></div><p id="onprem-detail" class="note"></p></section>
+      <section id="tab-prices" class="tabpanel" role="tabpanel" aria-labelledby="t-prices" hidden><div class="toolbar"><p id="prices-note" class="source-note">Loading assumption registry…</p><label class="inline"><span>Show</span><select id="status-filter"><option value="">All entries</option><option value="ASSUMPTION">Assumptions only</option><option value="SOURCED">Sourced</option><option value="DERIVED">Derived</option></select></label></div><div class="surface"><div class="table-wrap plain"><table id="prices-table"></table></div></div></section>
+    </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='vendor/chart.umd.js';s.onload=function(){window.dispatchEvent(new Event('chartjs-ready'))};document.head.appendChild(s);"></script>
   <script src="app.js"></script>

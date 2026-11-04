@@ -1,4 +1,3 @@
-/* Phase 2: overview + config form + groups chart + dark theme (no analysis page yet) */
 "use strict";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -338,6 +337,7 @@ function renderKpis(d) {
         " cloud pricing",
     );
   $("#kpis").innerHTML = html;
+  $("#analysis-kpis").innerHTML = html;
 }
 function scenarioRows(d) {
   const S = d.scenarios,
@@ -352,13 +352,14 @@ function scenarioRows(d) {
 function renderScenarioTable(d) {
   const html = `<thead><tr><th>Scenario</th><th class="num">Monthly (USD)</th><th class="num">Monthly (INR Cr)</th><th class="num">Up-front (USD)</th><th class="num">5-year TCO</th><th class="num">10-year TCO</th></tr></thead><tbody>${scenarioRows(d)}</tbody>`;
   $("#scenario-table").innerHTML = html;
+  $("#analysis-scenario-table").innerHTML = html;
 }
 function renderFindings(d) {
   const S = d.scenarios,
     cloudDelta = S[NAMES.gcp].monthly_usd - S[NAMES.onp].monthly_usd,
     be = d.breakeven_months_vs_onprem[NAMES.gcp];
   $("#findings").innerHTML =
-    `<div class="section-heading"><div><span class="eyebrow">Signal, not noise</span><h2>Key findings</h2></div></div><div class="finding"><span class="finding-number">${usdK(cloudDelta)}</span><p>monthly difference between GCP managed and the on-premises lower bound.</p></div><div class="finding"><span class="finding-icon">↗</span><p><strong>${beText(be, d.horizon_months)}</strong> is the modeled crossover for GCP managed versus on-premises.</p></div><div class="finding"><span class="finding-icon">◎</span><p>Hybrid keeps cloud edge delivery while moving cache and databases into your control.</p></div><button class="text-button page-link" data-goto="configure" type="button">Tune the scenario <span aria-hidden="true">→</span></button>`;
+    `<div class="section-heading"><div><span class="eyebrow">Signal, not noise</span><h2>Key findings</h2></div></div><div class="finding"><span class="finding-number">${usdK(cloudDelta)}</span><p>monthly difference between GCP managed and the on-premises lower bound.</p></div><div class="finding"><span class="finding-icon">↗</span><p><strong>${beText(be, d.horizon_months)}</strong> is the modeled crossover for GCP managed versus on-premises.</p></div><div class="finding"><span class="finding-icon">◎</span><p>Hybrid keeps cloud edge delivery while moving cache and databases into your control.</p></div><button class="text-button page-link" data-goto="analysis" type="button">Open detailed analysis <span aria-hidden="true">→</span></button>`;
 }
 function makeChart(key, canvasId, config) {
   if (typeof Chart === "undefined") {
@@ -437,13 +438,180 @@ function renderGroupsChart(d) {
     },
   });
 }
+function breakevenCard(label, m, h) {
+  return card(
+    m === null ? "" : "gcp",
+    label,
+    beText(m, h),
+    m === null
+      ? "Cloud stays cheaper over this horizon"
+      : "Cumulative on-prem cost falls below cloud",
+  );
+}
+function renderBreakeven(d) {
+  const a = d.breakeven_months_vs_onprem,
+    b = d.breakeven_months_vs_hybrid;
+  $("#breakeven-cards").innerHTML =
+    breakevenCard("GCP vs on-prem", a[NAMES.gcp], d.horizon_months) +
+    breakevenCard("AWS vs on-prem", a[NAMES.aws], d.horizon_months) +
+    breakevenCard("GCP vs hybrid", b[NAMES.gcp], d.horizon_months) +
+    breakevenCard("Self-hosted GCP vs hybrid", b[NAMES.self], d.horizon_months);
+}
+function renderCumulativeChart(d) {
+  const S = d.scenarios,
+    names = Object.keys(S),
+    be = d.breakeven_months_vs_onprem[NAMES.gcp],
+    t = chartTokens();
+  const datasets = names.map((n) => ({
+    label: n,
+    data: S[n].cumulative_usd.map((v, i) => ({ x: i, y: v / 1e6 })),
+    borderColor: COLORS[n],
+    backgroundColor: COLORS[n],
+    borderWidth: n === NAMES.onp || n === NAMES.gcp ? 3 : 1.75,
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    tension: 0.18,
+  }));
+  if (be !== null && be !== undefined)
+    datasets.push({
+      label: `Break-even: month ${be}`,
+      data: [{ x: be, y: S[NAMES.gcp].cumulative_usd[be] / 1e6 }],
+      borderColor: "#f6b34f",
+      backgroundColor: "#f6b34f",
+      pointRadius: 6,
+      pointStyle: "rectRot",
+      showLine: false,
+    });
+  makeChart("cumulative", "chart-cumulative", {
+    type: "line",
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 420 },
+      parsing: false,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        x: {
+          type: "linear",
+          min: 0,
+          max: d.horizon_months,
+          title: { display: true, text: "Months", color: t.text },
+          ticks: { color: t.text },
+          grid: { color: t.grid },
+          border: { display: false },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Cumulative cost (USD millions)",
+            color: t.text,
+          },
+          ticks: { color: t.text },
+          grid: { color: t.grid },
+          border: { display: false },
+        },
+      },
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            color: t.text,
+            boxWidth: 10,
+            boxHeight: 10,
+            padding: 16,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          backgroundColor: `rgba(17, 17, 17, 0.8)`,
+          titleColor: "white",
+          bodyColor: "white",
+          padding: 12,
+        },
+      },
+    },
+  });
+}
+function renderItems(d) {
+  const n = $("#item-scenario").value,
+    S = d.scenarios[n],
+    items = Object.entries(S.items),
+    total = items.reduce((a, [, v]) => a + v, 0) || 1;
+  const rows = items
+    .sort((a, b) => b[1] - a[1])
+    .map(
+      ([k, v]) =>
+        `<tr><td>${esc(k)}</td><td class="num">${usd(v)}</td><td><span class="share"><i style="width:${Math.max(3, (v / total) * 100)}%"></i></span><span class="share-label">${((v / total) * 100).toFixed(1)}%</span></td></tr>`,
+    )
+    .join("");
+  $("#items-table").innerHTML =
+    `<thead><tr><th>Line item</th><th class="num">USD / month</th><th>Share of scenario</th></tr></thead><tbody>${rows}<tr class="total-row"><td>Total</td><td class="num">${usd(total)}</td><td></td></tr></tbody>`;
+  const od = d.onprem_detail;
+  $("#onprem-detail").textContent =
+    n === NAMES.onp
+      ? `On-premises sizing: ${od.servers} servers, ${od.racks} racks, ${od.kw.toFixed(0)} kW, peak bandwidth ${od.peak_gbps.toFixed(0)} Gbps per site, ${od.staff} IT staff.`
+      : "";
+}
 function render(d) {
   renderKpis(d);
   renderScenarioTable(d);
   renderFindings(d);
   renderGroupsChart(d);
+  renderBreakeven(d);
+  renderCumulativeChart(d);
+  const sel = $("#item-scenario"),
+    prev = sel.value || NAMES.gcp;
+  sel.innerHTML = Object.keys(d.scenarios)
+    .map((n) => `<option value="${esc(n)}">${esc(n)}</option>`)
+    .join("");
+  sel.value = d.scenarios[prev] ? prev : NAMES.gcp;
+  renderItems(d);
 }
 
+async function loadPrices() {
+  if (state.pricesLoaded) return;
+  try {
+    state.prices = await getJSON("/prices");
+    state.pricesLoaded = true;
+    $("#prices-note").textContent =
+      `Price registry retrieved ${state.prices.retrieved}. ${state.prices.note}`;
+    renderPrices();
+  } catch (e) {
+    $("#prices-note").textContent = "Could not load prices: " + e.message;
+  }
+}
+function renderPrices() {
+  const filter = $("#status-filter").value;
+  const rows = state.prices.rows
+    .filter(
+      (r) =>
+        !filter ||
+        r.status.toUpperCase().startsWith(filter) ||
+        (filter === "SOURCED" &&
+          r.status.toUpperCase().includes("SOURCED") &&
+          !r.status.toUpperCase().startsWith("PARTLY")),
+    )
+    .map((r) => {
+      const cls = r.status.toUpperCase().startsWith("PARTLY")
+        ? "PARTLY"
+        : r.status.toUpperCase().split(" ")[0];
+      return `<tr><td>${esc(r.item)}</td><td>${esc(r.value)}</td><td><span class="badge ${cls}">${esc(r.status)}</span></td><td>${esc(r.source)}</td></tr>`;
+    })
+    .join("");
+  $("#prices-table").innerHTML =
+    `<thead><tr><th>Item</th><th>Value</th><th>Evidence</th><th>Source / note</th></tr></thead><tbody>${rows}</tbody>`;
+}
+function selectTab(name) {
+  $$(".tabs [role=tab]").forEach((b) =>
+    b.setAttribute("aria-selected", String(b.dataset.tab === name)),
+  );
+  $$(".tabpanel").forEach((p) => {
+    p.hidden = p.id !== "tab-" + name;
+  });
+  if (name === "prices") loadPrices();
+  setTimeout(() => Object.values(state.charts).forEach((c) => c.resize()), 60);
+}
 function showPage(name) {
   state.currentPage = name;
   if (window.__switchWorkspace) window.__switchWorkspace(name);
@@ -455,6 +623,11 @@ function showPage(name) {
       b.classList.toggle("active", b.dataset.page === name),
     );
   }
+  if (name === "analysis")
+    setTimeout(
+      () => Object.values(state.charts).forEach((c) => c.resize()),
+      60,
+    );
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -500,11 +673,22 @@ async function init() {
     e.preventDefault();
     showPage("overview");
   });
+  $$(".tabs [role=tab]").forEach((b) =>
+    b.addEventListener("click", () => selectTab(b.dataset.tab)),
+  );
   $("#reset").addEventListener("click", resetForm);
   $("#apply").addEventListener("click", () => {
     clearTimeout(state.timer);
     evaluate();
   });
+  $("#item-scenario").addEventListener(
+    "change",
+    () => state.data && renderItems(state.data),
+  );
+  $("#status-filter").addEventListener(
+    "change",
+    () => state.prices && renderPrices(),
+  );
   try {
     state.schema = await getJSON("/schema");
     buildForm(state.schema);

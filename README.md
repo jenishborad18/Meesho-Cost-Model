@@ -10,17 +10,52 @@ The workload is hypothetical and scaled from public figures. It is **not** Meesh
 
 ## Structure
 ```
-backend/
-    tests/
-        test_cloud_model.py
-    model.py
-    prices.json
-frontend/
-    app.js                           the web page (no framework)
-    index.html
-    style.css
+|   README.md
+|   requirements.txt
+|   
++---backend
+|   |   api.py
+|   |   experiments.py
+|   |   model.py
+|   |   prices.json
+|   |   
+|   +---results
+|   |       calculator_inputs.csv
+|   |       fig1_monthly_cost.png
+|   |       fig2_breakeven.png
+|   |       fig3_sensitivity.png
+|   |       fig4_scaling.png
+|   |       fig5_heatmap.png
+|   |       fig6_transit_parity.png
+|   |       results.json
+|   |       
+|   +---tests
+|   |       test_api.py
+|   |       test_cloud_model.py
+|   |       test_onprem_breakeven.py
+|   |       
+|   \---__pycache__
+|           api.cpython-314.pyc
+|           model.cpython-314.pyc
+|           
+\---frontend
+    |   app.js
+    |   index.html
+    |   style.css
+    |   theme.js
+    |   
+    \---vendor
+            chart.umd.js
+```
 
-requirements.txt 
+## Run locally
+```bash
+pip install -r requirements.txt
+cd backend
+pytest -q                        
+uvicorn api:app --port 8000         #API docs: /docs
+python experiments.py            # regenerate results/
+python loadtest.py               # starts its own server; or: python loadtest.py https://your-url
 ```
 
 ## API

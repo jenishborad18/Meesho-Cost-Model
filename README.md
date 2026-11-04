@@ -30,13 +30,9 @@ The workload is hypothetical and scaled from public figures. It is **not** Meesh
 |   |       results.json
 |   |       
 |   +---tests
-|   |       test_api.py
-|   |       test_cloud_model.py
-|   |       test_onprem_breakeven.py
-|   |       
-|   \---__pycache__
-|           api.cpython-314.pyc
-|           model.cpython-314.pyc
+|           test_api.py
+|           test_cloud_model.py
+|           test_onprem_breakeven.py 
 |           
 \---frontend
     |   app.js

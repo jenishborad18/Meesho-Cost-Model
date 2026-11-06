@@ -1130,12 +1130,14 @@ input:invalid {
 }
 
 .tabs button:hover {
-  color: var(--ink);
+  color: var(--secondary-ink);
+  background: var(--secondary-soft);
 }
 
 .tabs button[aria-selected="true"] {
-  color: var(--primary-deep);
-  background: var(--primary-soft);
+  color: var(--secondary-ink);
+  background: var(--secondary);
+  box-shadow: 0 3px 9px rgba(255, 157, 0, 0.18);
 }
 
 .analysis-summary>.surface {
